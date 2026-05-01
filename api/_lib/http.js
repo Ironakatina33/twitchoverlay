@@ -1,5 +1,18 @@
 async function parseJsonBody(req) {
-  if (!req || req.body == null) {
+  if (!req) {
+    return {};
+  }
+
+  if (typeof req.json === "function") {
+    try {
+      const parsed = await req.json();
+      return parsed && typeof parsed === "object" ? parsed : {};
+    } catch {
+      return {};
+    }
+  }
+
+  if (req.body == null) {
     return {};
   }
 

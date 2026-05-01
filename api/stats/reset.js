@@ -1,24 +1,23 @@
 const { isAuthorizedPanelRequest } = require("../_lib/auth");
 const { getServiceClient } = require("../_lib/supabase");
+const { sendJson } = require("../_lib/response");
 const { resetStats } = require("../_lib/state-store");
 
 module.exports = async function handler(req, res) {
   if (req.method !== "POST") {
-    res.status(405).json({ error: "Method Not Allowed" });
-    return;
+    return sendJson(res, 405, { error: "Method Not Allowed" });
   }
 
   if (!isAuthorizedPanelRequest(req)) {
-    res.status(401).json({ error: "Unauthorized" });
-    return;
+    return sendJson(res, 401, { error: "Unauthorized" });
   }
 
   try {
     const supabase = getServiceClient();
     const state = await resetStats(supabase);
-    res.status(200).json({ ok: true, state });
+    return sendJson(res, 200, { ok: true, state });
   } catch (error) {
-    res.status(500).json({
+    return sendJson(res, 500, {
       error: "Impossible de reset les stats",
       details: error.message,
     });

@@ -1,26 +1,25 @@
 const { isAuthorizedPanelRequest } = require("../_lib/auth");
 const { parseJsonBody } = require("../_lib/http");
 const { getServiceClient } = require("../_lib/supabase");
+const { sendJson } = require("../_lib/response");
 const { triggerFollow } = require("../_lib/state-store");
 
 module.exports = async function handler(req, res) {
   if (req.method !== "POST") {
-    res.status(405).json({ error: "Method Not Allowed" });
-    return;
+    return sendJson(res, 405, { error: "Method Not Allowed" });
   }
 
   if (!isAuthorizedPanelRequest(req)) {
-    res.status(401).json({ error: "Unauthorized" });
-    return;
+    return sendJson(res, 401, { error: "Unauthorized" });
   }
 
   try {
     const body = await parseJsonBody(req);
     const supabase = getServiceClient();
     const state = await triggerFollow(supabase, body?.username);
-    res.status(202).json({ ok: true, state });
+    return sendJson(res, 202, { ok: true, state });
   } catch (error) {
-    res.status(500).json({
+    return sendJson(res, 500, {
       error: "Impossible de déclencher l'alerte follow",
       details: error.message,
     });

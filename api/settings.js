@@ -1,32 +1,30 @@
 const { isAuthorizedPanelRequest } = require("./_lib/auth");
 const { getServiceClient } = require("./_lib/supabase");
 const { parseJsonBody } = require("./_lib/http");
+const { sendJson } = require("./_lib/response");
 const { updateSettings } = require("./_lib/state-store");
 
 module.exports = async function handler(req, res) {
   if (req.method !== "POST") {
-    res.status(405).json({ error: "Method Not Allowed" });
-    return;
+    return sendJson(res, 405, { error: "Method Not Allowed" });
   }
 
   if (!isAuthorizedPanelRequest(req)) {
-    res.status(401).json({ error: "Unauthorized" });
-    return;
+    return sendJson(res, 401, { error: "Unauthorized" });
   }
 
   const body = await parseJsonBody(req);
   const settings = body?.settings;
   if (!settings || typeof settings !== "object") {
-    res.status(400).json({ error: "Payload invalide" });
-    return;
+    return sendJson(res, 400, { error: "Payload invalide" });
   }
 
   try {
     const supabase = getServiceClient();
     const state = await updateSettings(supabase, settings);
-    res.status(200).json(state);
+    return sendJson(res, 200, state);
   } catch (error) {
-    res.status(500).json({
+    return sendJson(res, 500, {
       error: "Impossible de sauvegarder les settings",
       details: error.message,
     });

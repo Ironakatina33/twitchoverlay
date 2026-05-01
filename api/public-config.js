@@ -1,14 +1,13 @@
-const { getSupabaseAnonKey, getSupabaseUrl } = require("./_lib/supabase");
+const { sendJson } = require("./_lib/response");
 
 module.exports = async function handler(req, res) {
   if (req.method !== "GET") {
-    res.status(405).json({ error: "Method Not Allowed" });
-    return;
+    return sendJson(res, 405, { error: "Method Not Allowed" });
   }
 
-  res.status(200).json({
-    supabaseUrl: getSupabaseUrl() || null,
-    supabaseAnonKey: getSupabaseAnonKey() || null,
+  return sendJson(res, 200, {
+    supabaseUrl: process.env.SUPABASE_URL || null,
+    supabaseAnonKey: process.env.SUPABASE_ANON_KEY || null,
     panelTokenRequired: Boolean(process.env.PANEL_WRITE_TOKEN),
     twitchPollingEnabled: process.env.ENABLE_TWITCH_POLLING === "true",
   });

@@ -1,5 +1,6 @@
 const { isAuthorizedCronRequest, isAuthorizedPanelRequest } = require("../_lib/auth");
 const { getServiceClient } = require("../_lib/supabase");
+const { sendJson } = require("../_lib/response");
 const { setViewerCountAndTwitchStatus } = require("../_lib/state-store");
 const { fetchViewerCount } = require("../_lib/twitch");
 
@@ -32,25 +33,22 @@ async function syncViewers() {
 
 module.exports = async function handler(req, res) {
   if (req.method !== "GET" && req.method !== "POST") {
-    res.status(405).json({ error: "Method Not Allowed" });
-    return;
+    return sendJson(res, 405, { error: "Method Not Allowed" });
   }
 
   if (req.method === "GET" && !isAuthorizedCronRequest(req)) {
-    res.status(401).json({ error: "Unauthorized cron" });
-    return;
+    return sendJson(res, 401, { error: "Unauthorized cron" });
   }
 
   if (req.method === "POST" && !isAuthorizedPanelRequest(req)) {
-    res.status(401).json({ error: "Unauthorized panel" });
-    return;
+    return sendJson(res, 401, { error: "Unauthorized panel" });
   }
 
   try {
     const state = await syncViewers();
-    res.status(200).json({ ok: true, state });
+    return sendJson(res, 200, { ok: true, state });
   } catch (error) {
-    res.status(500).json({
+    return sendJson(res, 500, {
       error: "Sync viewers impossible",
       details: error.message,
     });
