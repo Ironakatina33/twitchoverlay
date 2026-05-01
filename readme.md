@@ -1,7 +1,7 @@
 # Twitch Overlay Studio (Vercel + Supabase)
 
 Overlay Twitch animé + panel de customisation, utilisable depuis **n'importe où** via URL, avec un setup qui reste généralement **gratuit**.
-t
+ta
 ## Architecture
 
 - Front statique: `public/overlay.html` et `public/panel.html`
