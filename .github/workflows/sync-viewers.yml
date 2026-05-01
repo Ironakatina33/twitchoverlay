@@ -49,9 +49,9 @@ jobs:
 
             if (parsed?.ok !== true || !parsed?.state) {
               if (parsed?.settings && parsed?.stats && parsed?.twitch) {
-                console.error('TWITCH_SYNC_URL pointe probablement vers /api/state au lieu de /api/twitch/sync-viewers.');
+                console.error('TWITCH_SYNC_URL pointe probablement vers /api/state au lieu de /api/twitch-sync-viewers.');
               } else {
-                console.error('Réponse inattendue: TWITCH_SYNC_URL doit pointer vers /api/twitch/sync-viewers.');
+                console.error('Réponse inattendue: TWITCH_SYNC_URL doit pointer vers /api/twitch-sync-viewers.');
               }
               process.exit(1);
             }

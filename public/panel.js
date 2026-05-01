@@ -226,7 +226,7 @@ async function loadPublicConfig() {
   }
 
   if (config.twitchPollingEnabled) {
-    await fetchJson("/api/twitch/sync-viewers", {
+    await fetchJson("/api/twitch-sync-viewers", {
       method: "POST",
       headers: buildJsonHeaders(),
     }).catch(() => {
