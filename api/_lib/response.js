@@ -4,7 +4,16 @@ function sendJson(res, status, payload) {
     return;
   }
 
-  return new Response(JSON.stringify(payload), {
+  const body = JSON.stringify(payload);
+
+  if (res && typeof res.setHeader === "function" && typeof res.end === "function") {
+    res.statusCode = status;
+    res.setHeader("content-type", "application/json; charset=utf-8");
+    res.end(body);
+    return;
+  }
+
+  return new Response(body, {
     status,
     headers: {
       "content-type": "application/json; charset=utf-8",
