@@ -1,5 +1,3 @@
-const { createClient } = require("@supabase/supabase-js");
-
 function getSupabaseUrl() {
   return process.env.SUPABASE_URL || "";
 }
@@ -14,6 +12,13 @@ function getServiceClient() {
 
   if (!url || !key) {
     throw new Error("SUPABASE_URL ou SUPABASE_SERVICE_ROLE_KEY manquant.");
+  }
+
+  let createClient;
+  try {
+    ({ createClient } = require("@supabase/supabase-js"));
+  } catch (error) {
+    throw new Error(`@supabase/supabase-js introuvable (${error.message})`);
   }
 
   return createClient(url, key, {
