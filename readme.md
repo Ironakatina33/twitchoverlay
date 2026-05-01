@@ -7,7 +7,7 @@ ta
 - Front statique: `public/overlay.html` et `public/panel.html`
 - Backend serverless: `api/*` (Vercel Functions)
 - Realtime + stockage: Supabase (`overlay_state`, `overlay_events`)
-- Sync viewers Twitch: endpoint cron `api/twitch/sync-viewers.js`
+- Sync viewers Twitch: endpoint planifié `api/twitch/sync-viewers.js`
 
 ## Features
 
@@ -65,6 +65,26 @@ Ouvre:
 3. Ajoute les variables d'environnement du `.env`
 4. Deploy
 
+Important: en plan **Vercel Hobby (gratuit)**, les cron jobs Vercel sont limités à 1 fois/jour. Le projet utilise donc **GitHub Actions** pour lancer la sync automatiquement toutes les 30 minutes.
+
+## 4-bis) Scheduler gratuit (GitHub Actions)
+
+Le workflow est déjà inclus: `.github/workflows/sync-viewers.yml`
+
+Il exécute:
+
+- toutes les 30 minutes (`*/30 * * * *`)
+- et à la demande via `workflow_dispatch`
+
+### Secrets GitHub à ajouter
+
+Dans GitHub → `Settings` → `Secrets and variables` → `Actions` → `New repository secret`, ajoute:
+
+- `TWITCH_SYNC_URL` = `https://ton-projet.vercel.app/api/twitch/sync-viewers`
+- `CRON_SECRET` = la même valeur que ta variable `CRON_SECRET` sur Vercel (optionnel, mais recommandé)
+
+Ensuite, dans l'onglet `Actions`, tu peux lancer manuellement `Sync Twitch Viewers` pour tester.
+
 Tu obtiens des URLs publiques, ex:
 
 - `https://ton-projet.vercel.app/panel`
@@ -82,7 +102,7 @@ Tu obtiens des URLs publiques, ex:
 - `POST /api/settings` → update settings (token panel si activé)
 - `POST /api/events/follow` → déclenche un follow
 - `POST /api/stats/reset` → reset des compteurs
-- `GET /api/twitch/sync-viewers` → endpoint cron Vercel
+- `GET /api/twitch/sync-viewers` → endpoint appelé par scheduler (GitHub Actions)
 
 Exemple follow (PowerShell):
 

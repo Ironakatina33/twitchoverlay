@@ -7,11 +7,5 @@
     { "source": "/styles.css", "destination": "/public/styles.css" },
     { "source": "/panel.js", "destination": "/public/panel.js" },
     { "source": "/overlay.js", "destination": "/public/overlay.js" }
-  ],
-  "crons": [
-    {
-      "path": "/api/twitch/sync-viewers",
-      "schedule": "*/1 * * * *"
-    }
   ]
 }
