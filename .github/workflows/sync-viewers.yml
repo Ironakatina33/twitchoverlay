@@ -20,14 +20,47 @@ jobs:
             exit 1
           fi
 
+          RESPONSE=""
           if [ -n "$CRON_SECRET" ]; then
-            curl --fail-with-body --show-error --silent \
+            RESPONSE=$(curl --fail-with-body --show-error --silent \
               --request GET \
               --header "Authorization: Bearer $CRON_SECRET" \
-              "$SYNC_URL"
+              "$SYNC_URL")
           else
             echo "CRON_SECRET absent: appel sans header Authorization"
-            curl --fail-with-body --show-error --silent \
+            RESPONSE=$(curl --fail-with-body --show-error --silent \
               --request GET \
-              "$SYNC_URL"
+              "$SYNC_URL")
           fi
+
+          echo "$RESPONSE"
+
+          printf '%s' "$RESPONSE" | node -e "
+          let raw = '';
+          process.stdin.on('data', (d) => (raw += d));
+          process.stdin.on('end', () => {
+            let parsed;
+            try {
+              parsed = JSON.parse(raw);
+            } catch {
+              console.error('Réponse non-JSON: vérifie TWITCH_SYNC_URL.');
+              process.exit(1);
+            }
+
+            if (parsed?.ok !== true || !parsed?.state) {
+              if (parsed?.settings && parsed?.stats && parsed?.twitch) {
+                console.error('TWITCH_SYNC_URL pointe probablement vers /api/state au lieu de /api/twitch/sync-viewers.');
+              } else {
+                console.error('Réponse inattendue: TWITCH_SYNC_URL doit pointer vers /api/twitch/sync-viewers.');
+              }
+              process.exit(1);
+            }
+
+            if (!parsed?.state?.twitch?.lastSyncAt) {
+              console.error('Sync appelée mais lastSyncAt est vide. Vérifie les variables Vercel/Supabase.');
+              process.exit(1);
+            }
+
+            console.log('Sync endpoint OK.');
+          });
+          "
