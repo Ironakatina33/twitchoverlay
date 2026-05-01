@@ -1,11 +1,11 @@
 {
   "version": 2,
   "rewrites": [
-    { "source": "/", "destination": "/public/panel.html" },
-    { "source": "/panel", "destination": "/public/panel.html" },
-    { "source": "/overlay", "destination": "/public/overlay.html" },
-    { "source": "/styles.css", "destination": "/public/styles.css" },
-    { "source": "/panel.js", "destination": "/public/panel.js" },
-    { "source": "/overlay.js", "destination": "/public/overlay.js" }
+    { "source": "/", "destination": "/panel.html" },
+    { "source": "/panel", "destination": "/panel.html" },
+    { "source": "/overlay", "destination": "/overlay.html" },
+    { "source": "/styles.css", "destination": "/styles.css" },
+    { "source": "/panel.js", "destination": "/panel.js" },
+    { "source": "/overlay.js", "destination": "/overlay.js" }
   ]
 }

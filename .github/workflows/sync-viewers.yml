@@ -21,13 +21,13 @@ jobs:
           fi
 
           if [ -n "$CRON_SECRET" ]; then
-            curl --fail --show-error --silent \
+            curl --fail-with-body --show-error --silent \
               --request GET \
               --header "Authorization: Bearer $CRON_SECRET" \
               "$SYNC_URL"
           else
             echo "CRON_SECRET absent: appel sans header Authorization"
-            curl --fail --show-error --silent \
+            curl --fail-with-body --show-error --silent \
               --request GET \
               "$SYNC_URL"
           fi
