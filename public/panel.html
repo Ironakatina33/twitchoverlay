@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Panel Overlay Twitch</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Sora:wght@500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body class="panel-page">
+    <main class="panel-shell">
+      <header class="panel-header">
+        <div>
+          <p class="eyebrow">Overlay Studio</p>
+          <h1>Personnalisation OBS</h1>
+        </div>
+        <div class="status-stack">
+          <p id="twitchStatus" class="pill">Twitch: non connecté</p>
+          <p id="twitchSyncAt" class="muted">Sync: -</p>
+        </div>
+      </header>
+
+      <section class="card compact-card">
+        <h2>Accès panel</h2>
+        <p class="muted">Si tu as défini <code>PANEL_WRITE_TOKEN</code>, entre-le ici.</p>
+        <input id="panelToken" type="password" placeholder="Token panel (optionnel)" />
+      </section>
+
+      <section class="panel-grid">
+        <article class="card">
+          <h2>Thème</h2>
+          <label>
+            Nom overlay
+            <input id="overlayName" type="text" maxlength="40" />
+          </label>
+          <label>
+            Police
+            <select id="fontFamily">
+              <option value="'Space Grotesk', sans-serif">Space Grotesk</option>
+              <option value="'Sora', sans-serif">Sora</option>
+              <option value="'Trebuchet MS', sans-serif">Trebuchet MS</option>
+              <option value="'Verdana', sans-serif">Verdana</option>
+            </select>
+          </label>
+          <div class="color-row">
+            <label>
+              Couleur primaire
+              <input id="primaryColor" type="color" value="#64f2c8" />
+            </label>
+            <label>
+              Couleur accent
+              <input id="accentColor" type="color" value="#ff7b72" />
+            </label>
+            <label>
+              Couleur texte
+              <input id="textColor" type="color" value="#f8fbff" />
+            </label>
+          </div>
+        </article>
+
+        <article class="card">
+          <h2>Disposition</h2>
+          <label>
+            Ancrage
+            <select id="anchor">
+              <option value="top-left">Haut gauche</option>
+              <option value="top-right">Haut droite</option>
+              <option value="bottom-left">Bas gauche</option>
+              <option value="bottom-right">Bas droite</option>
+            </select>
+          </label>
+          <label>
+            Espace widgets
+            <input id="gap" type="range" min="6" max="40" step="1" />
+          </label>
+          <label>
+            Taille globale
+            <input id="scale" type="range" min="0.7" max="1.4" step="0.05" />
+          </label>
+        </article>
+
+        <article class="card">
+          <h2>Widgets</h2>
+          <label class="switch"><input id="showViewers" type="checkbox" /> Viewers</label>
+          <label class="switch"><input id="showFollowers" type="checkbox" /> Followers</label>
+          <label class="switch"><input id="showLastFollow" type="checkbox" /> Dernier follow</label>
+        </article>
+
+        <article class="card">
+          <h2>Alertes Follow</h2>
+          <label class="switch"><input id="alertsEnabled" type="checkbox" /> Activer</label>
+          <label>
+            Durée (ms)
+            <input id="alertDuration" type="number" min="1500" max="20000" step="100" />
+          </label>
+          <div class="inline-row">
+            <input id="testFollowName" type="text" placeholder="Pseudo à tester" maxlength="64" />
+            <button id="triggerFollow" type="button">Tester follow</button>
+          </div>
+          <button id="resetStats" type="button" class="ghost">Reset compteurs</button>
+        </article>
+      </section>
+
+      <footer class="panel-footer muted">
+        URL overlay OBS: <code id="overlayUrl"></code>
+      </footer>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="/panel.js"></script>
+  </body>
+</html>

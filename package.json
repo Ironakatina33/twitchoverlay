@@ -1,0 +1,16 @@
+{
+  "name": "twitch-overlay-studio",
+  "version": "1.0.0",
+  "description": "Overlay Twitch animé et personnalisable pour OBS",
+  "main": "api/state.js",
+  "scripts": {
+    "start": "npx vercel dev",
+    "dev": "npx vercel dev"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.49.8"
+  }
+}
